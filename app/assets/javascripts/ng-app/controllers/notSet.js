@@ -1,44 +1,16 @@
 angular.module('notSetApp')
-    .controller('notSetCtrl', ['$scope', '$timeout', notSetCtrl])
+  .controller('notSetCtrl', ['$scope', '$timeout', 'Game', 'Player', notSetCtrl])
 
 
-function notSetCtrl($scope, $timeout){
-  $scope.deck = makeObjectDeck()
-  $scope.board = makeFirstSolvableBoard($scope.deck)
+function notSetCtrl($scope, $timeout, Game, Player){
+  $scope.board = Game.board
   $scope.attemptTimer = 0
-  $scope.selectedCards = []
-  $scope.cardClicksEnabled = false
   $scope.gameOver = false
   $scope.optionsPicked=false
   $scope.unlocked = true
   $scope.decktype = "endless"
   $scope.timer = "notimer"
-  $scope.setPlayers = [
-    {
-      id: 0,
-      color: 'blue',
-      text:"press 'Q' to attempt a set",
-      points: 0
-    },
-    {
-      id: 1,
-      color: 'red',
-      text:"press 'O' to attempt a set",
-      points: 0
-    },
-    {
-      id: 2,
-      color: 'green',
-      text:"press 'Z' to attempt a set",
-      points: 0
-    },
-    {
-      id: 3,
-      color: 'yellow',
-      text:"press 'M' to attempt a set",
-      points:0
-    }
-  ]
+  $scope.setPlayers = Player.players
   $scope.deckTypes = [
     {
       type: "endless",
@@ -60,19 +32,19 @@ function notSetCtrl($scope, $timeout){
     }
   ]
   $scope.selectCard = function($index){
-    if ($scope.cardClicksEnabled && $scope.cardNotYetSelected($index)) {
+    if (Game.cardsSelectable && $scope.cardNotYetSelected($index)) {
       if ($scope.cardNotYetSelected($index)){
         $scope.addToSelectedCards($index)
         if ($scope.threeCards()){
           if($scope.isSelectedSet()){
-            $scope.setPlayers[$scope.currentPlayer].points++
+            Player.players[$scope.currentPlayer].points++
             $scope.replaceUsedCards()
-            $scope.selectedCards = []
+            Game.selectedCards = []
             if ($scope.checkResetNeeded(0)) {
               $scope.makeSolvableBoard()
             }
           } else {
-            $scope.setPlayers[$scope.currentPlayer].points--
+            Player.players[$scope.currentPlayer].points--
           }
           $scope.resetStatuses()
         }
@@ -80,10 +52,10 @@ function notSetCtrl($scope, $timeout){
     }
   }
   $scope.drawCard = function(){
-    var keys = Object.keys($scope.deck)
+    var keys = Object.keys(Game.deck)
     var randomProp = keys[Math.floor(Math.random()*keys.length)]
-    var card = $scope.deck[randomProp] 
-    delete $scope.deck[randomProp]
+    var card = Game.deck[randomProp] 
+    delete Game.deck[randomProp]
     return card
 
   }
@@ -95,7 +67,7 @@ function notSetCtrl($scope, $timeout){
         var second = i
         for(b=second+1; b < 12; b++){
 
-          if ($scope.isValidSet($scope.board[start],$scope.board[second],$scope.board[b])) {
+          if ($scope.isValidSet(Game.board[start],Game.board[second],Game.board[b])) {
             $scope.answer= (start+1)+","+(second+1)+","+(b+1)
             return false
           } 
@@ -119,13 +91,13 @@ function notSetCtrl($scope, $timeout){
   }
   $scope.reshuffle = function(){
     for (i= 0; i<12; i++){
-      $scope.deck[$scope.board[i].id] = $scope.board[i]
+      Game.deck[Game.board[i].id] = Game.board[i]
     }
-    $scope.board = []
+    Game.board = []
   }
 
   $scope.decklength = function(){
-    return Object.keys($scope.deck).length
+    return Object.keys(Game.deck).length
   }
   $scope.deckUnsolvable = function(start,deck){
     if (start >= deck.length-2) {
@@ -143,19 +115,19 @@ function notSetCtrl($scope, $timeout){
     }
   }
   $scope.cardNotYetSelected = function($index){
-      return ($.inArray($scope.board[$index], $scope.selectedCards) == -1)
+      return ($.inArray(Game.board[$index], Game.selectedCards) == -1)
   }
   $scope.addToSelectedCards = function($index){
-    if (!$scope.board[$index].empty)
-      $scope.selectedCards.push($scope.board[$index])
+    if (!Game.board[$index].empty)
+      Game.selectedCards.push(Game.board[$index])
   }
   $scope.threeCards = function(){
-    return $scope.selectedCards.length == 3
+    return Game.selectedCards.length == 3
   }
   $scope.isSelectedSet = function(){
-    var c1 = $scope.selectedCards[0].stats
-    var c2 = $scope.selectedCards[1].stats
-    var c3 = $scope.selectedCards[2].stats
+    var c1 = Game.selectedCards[0].stats
+    var c2 = Game.selectedCards[1].stats
+    var c3 = Game.selectedCards[2].stats
     for (c=0; c<4; c++) {
       if ((c1[c]==c2[c] && c2[c]==c3[c]) || (c1[c]!=c2[c] && c2[c]!=c3[c] && c1[c]!=c3[c])){   
       } else {
@@ -165,29 +137,29 @@ function notSetCtrl($scope, $timeout){
     return true
   }
   $scope.inSelectedCards = function($index){
-    return ($.inArray($scope.board[$index], $scope.selectedCards) != -1)
+    return ($.inArray(Game.board[$index], Game.selectedCards) != -1)
   }
   $scope.replaceUsedCards = function(){
     if ($scope.decklength() < 3) { 
       for(i=0; i<3; i++) {
-      var change = $scope.board.indexOf($scope.selectedCards[i])
-      $scope.board[change] = new emptyCard()
+      var change = Game.board.indexOf(Game.selectedCards[i])
+      Game.board[change] = new emptyCard()
       }
     } else {
       for (i=0; i<3; i++) {
-        var change = $scope.board.indexOf($scope.selectedCards[i])
-        $scope.board[change] = $scope.drawCard()
+        var change = Game.board.indexOf(Game.selectedCards[i])
+        Game.board[change] = $scope.drawCard()
       }
     }
     if ($scope.decktype =="endless") {
       for (i=0; i<3; i++) {
-        $scope.deck[$scope.selectedCards[i].id]=$scope.selectedCards[i]
+        Game.deck[Game.selectedCards[i].id]=Game.selectedCards[i]
       }
     }
   }
   $scope.attemptSet = function(player){
   if (!$scope.gameOver) { 
-    $scope.cardClicksEnabled = true
+    Game.cardsSelectable = true
     $scope.attemptTimer = 5000
     $scope.currentPlayer = player
     prom = $timeout($scope.timePenalty,1000)
@@ -218,7 +190,7 @@ function notSetCtrl($scope, $timeout){
   }
   $scope.timePenalty = function(){
     if ($scope.attemptTimer == 0) {
-      $scope.setPlayers[$scope.currentPlayer].points--
+      Player.players[$scope.currentPlayer].points--
       $scope.resetStatuses()
     } else {
       $scope.attemptTimer -= 1000
@@ -229,20 +201,20 @@ function notSetCtrl($scope, $timeout){
     $timeout.cancel(prom)
     $scope.unlocked = true
     $scope.attemptTimer = 0
-    $scope.cardClicksEnabled = false
-    $scope.selectedCards = []
+    Game.cardsSelectable = false
+    Game.selectedCards = []
   }
   $scope.makeBoard = function(){
     for (i = 0; i < 12; i++) {
-      $scope.board[i] = $scope.drawCard()
+      Game.board[i] = $scope.drawCard()
     }
   }
   $scope.makeSolvableBoard = function(){
     // move board back into deck, redeal the board.
     if ( $scope.decklength() <= 20) {
       var deckAsArray = []
-      for(card in $scope.deck){
-        deckAsArray.push($scope.deck[card])
+      for(card in Game.deck){
+        deckAsArray.push(Game.deck[card])
       } 
       if ($scope.deckUnsolvable(0, deckAsArray)){
         console.log("game over")
@@ -266,7 +238,7 @@ function notSetCtrl($scope, $timeout){
   }
   $scope.generatePlayers = function(amount){
     for(i=0;i<4-amount;i++) {
-      $scope.setPlayers.pop()
+      Player.players.pop()
     }
   }
   $scope.goToGame = function(players){

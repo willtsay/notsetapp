@@ -1,8 +1,8 @@
 <!-- PARTIAL?  -->
 <div tabindex="0" ng-keypress="hotAttemptSet($event)">
-
   <div ng-show="!optionsPicked">
     GAME MODE
+    {{test}}
     <div>
       <span ng-repeat="option in deckTypes" ng-click="selectDeckType(option.type)" ng-class="{'highlighted':decktype==option.type}">{{option.text}}</span>
     </div>
