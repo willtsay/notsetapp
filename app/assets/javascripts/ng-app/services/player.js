@@ -30,10 +30,25 @@ function Player($rootScope){
     }],
     cullPlayers: function(amount){
       for(i=0;i<4-amount;i++) {
-      Player.players.pop()
-    }
-
-    }
+        service.players.pop()
+      }
+    },
+    currentPlayer: false,
+    attemptTimer: [0],
+    timerTypes: [
+      {
+        type: "notimer",
+        text: "No Time Limit"
+      },
+      {
+        type: 600000,
+        text: "10 Minute Time Limit"
+      }
+    ],
+    time: "notimer",
+    // timePenalty: function(){
+    //   if (service.attemptTimer == 0)
+    // }
 
   }
   return service

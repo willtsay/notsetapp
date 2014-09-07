@@ -25,6 +25,29 @@ function Game($rootScope){
       service.board = []
     },
     makeSolvableBoard: function(){
+
+    },
+    cardNotSelected: function(index){
+      return ($.inArray(service.board[index], service.selectedCards) == -1)
+    },
+    addToSelectedCards: function(index){
+      if (!service.board[index].empty)
+        service.selectedCards.push(service.board[index])
+    },
+    threeCards: function(){
+      return service.selectedCards.length == 3
+    },
+    isSelectedSet: function(){
+      var c1 = service.selectedCards[0].stats
+      var c2 = service.selectedCards[1].stats
+      var c3 = service.selectedCards[2].stats
+      for (c=0; c<4; c++) {
+        if ((c1[c]==c2[c] && c2[c]==c3[c]) || (c1[c]!=c2[c] && c2[c]!=c3[c] && c1[c]!=c3[c])){   
+        } else {
+          return false
+        }
+      }
+      return true
     }
   }
   return service

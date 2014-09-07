@@ -4,13 +4,13 @@ angular.module('notSetApp')
 
 function notSetCtrl($scope, $timeout, Game, Player){
   $scope.board = Game.board
-  $scope.attemptTimer = 0
+  $scope.attemptTimer = Player.attemptTimer
   $scope.gameOver = false
   $scope.optionsPicked=false
   $scope.unlocked = true
   $scope.decktype = "endless"
-  $scope.timer = "notimer"
   $scope.setPlayers = Player.players
+  $scope.timer=Player.time
   $scope.deckTypes = [
     {
       type: "endless",
@@ -21,30 +21,21 @@ function notSetCtrl($scope, $timeout, Game, Player){
       text: "Normal Mode"
     }
   ]
-  $scope.timerTypes = [
-    {
-      type: "notimer",
-      text: "No Time Limit"
-    },
-    {
-      type: 600000,
-      text: "10 Minute Time Limit"
-    }
-  ]
+  $scope.timerTypes = Player.timerTypes
   $scope.selectCard = function($index){
-    if (Game.cardsSelectable && $scope.cardNotYetSelected($index)) {
-      if ($scope.cardNotYetSelected($index)){
-        $scope.addToSelectedCards($index)
-        if ($scope.threeCards()){
-          if($scope.isSelectedSet()){
-            Player.players[$scope.currentPlayer].points++
+    if (Game.cardsSelectable && Game.cardNotSelected($index)) {
+      if (Game.cardNotSelected($index)){
+        Game.addToSelectedCards($index)
+        if (Game.threeCards()){
+          if(Game.isSelectedSet()){
+            Player.players[Player.currentPlayer].points++
             $scope.replaceUsedCards()
             Game.selectedCards = []
             if ($scope.checkResetNeeded(0)) {
               $scope.makeSolvableBoard()
             }
           } else {
-            Player.players[$scope.currentPlayer].points--
+            Player.players[Player.currentPlayer].points--
           }
           $scope.resetStatuses()
         }
@@ -114,28 +105,6 @@ function notSetCtrl($scope, $timeout, Game, Player){
       return $scope.deckUnsolvable(start+1, deck)
     }
   }
-  $scope.cardNotYetSelected = function($index){
-      return ($.inArray(Game.board[$index], Game.selectedCards) == -1)
-  }
-  $scope.addToSelectedCards = function($index){
-    if (!Game.board[$index].empty)
-      Game.selectedCards.push(Game.board[$index])
-  }
-  $scope.threeCards = function(){
-    return Game.selectedCards.length == 3
-  }
-  $scope.isSelectedSet = function(){
-    var c1 = Game.selectedCards[0].stats
-    var c2 = Game.selectedCards[1].stats
-    var c3 = Game.selectedCards[2].stats
-    for (c=0; c<4; c++) {
-      if ((c1[c]==c2[c] && c2[c]==c3[c]) || (c1[c]!=c2[c] && c2[c]!=c3[c] && c1[c]!=c3[c])){   
-      } else {
-        return false
-      }
-    }
-    return true
-  }
   $scope.inSelectedCards = function($index){
     return ($.inArray(Game.board[$index], Game.selectedCards) != -1)
   }
@@ -160,8 +129,8 @@ function notSetCtrl($scope, $timeout, Game, Player){
   $scope.attemptSet = function(player){
   if (!$scope.gameOver) { 
     Game.cardsSelectable = true
-    $scope.attemptTimer = 5000
-    $scope.currentPlayer = player
+    Player.attemptTimer[0] = 5000
+    Player.currentPlayer = player
     prom = $timeout($scope.timePenalty,1000)
     }
   }
@@ -189,18 +158,18 @@ function notSetCtrl($scope, $timeout, Game, Player){
     } 
   }
   $scope.timePenalty = function(){
-    if ($scope.attemptTimer == 0) {
-      Player.players[$scope.currentPlayer].points--
+    if (Player.attemptTimer[0] == 0) {
+      Player.players[Player.currentPlayer].points--
       $scope.resetStatuses()
     } else {
-      $scope.attemptTimer -= 1000
+      Player.attemptTimer[0] -= 1000
       prom = $timeout($scope.timePenalty,1000)
     }
   }
   $scope.resetStatuses = function(){
     $timeout.cancel(prom)
     $scope.unlocked = true
-    $scope.attemptTimer = 0
+    $scope.attemptTimer[0] = 0
     Game.cardsSelectable = false
     Game.selectedCards = []
   }
@@ -234,28 +203,23 @@ function notSetCtrl($scope, $timeout, Game, Player){
     $scope.decktype = deckType
   }
   $scope.selectTimerType = function(timerType){
-    $scope.timer = timerType
-  }
-  $scope.generatePlayers = function(amount){
-    for(i=0;i<4-amount;i++) {
-      Player.players.pop()
-    }
+    Player.time = timerType
   }
   $scope.goToGame = function(players){
-    if ($scope.decktype && $scope.timer) {
+    if ($scope.decktype && Player.time) {
       $scope.optionsPicked = true
-      $scope.generatePlayers(players)
-      if ($scope.timer != "notimer") {
+      Player.cullPlayers(players)
+      if (Player.time != "notimer") {
         $timeout($scope.gameTimer, 1000)      
       }
     }
 
   }
   $scope.gameTimer = function(){
-    if ($scope.timer == 0){
+    if (Player.time == 0){
       $scope.gameOver = true
     } else {
-      $scope.timer = $scope.timer-1000
+      Player.time = Player.time-1000
       $timeout($scope.gameTimer, 1000)  
     }
   }
