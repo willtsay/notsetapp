@@ -6,12 +6,12 @@ function notSetCtrl($scope, $timeout, Game, Player){
   $scope.board = Game.board
   $scope.attemptTimer = Player.attemptTimer
   $scope.setPlayers = Player.players
-  $scope.timer=Player.time
-  $scope.timerTypes = Player.timerTypes
   $scope.optionsPicked=false
   $scope.answer = Game.answer
   $scope.decktype = "endless"
   $scope.deckTypes = Game.deckTypes
+  $scope.timer=Player.time
+  $scope.timerTypes = Player.timerTypes
   $scope.selectCard = function($index){
     if (Player.cardsSelectable && Game.cardNotSelected($index)) {
       if (Game.cardNotSelected($index)){
