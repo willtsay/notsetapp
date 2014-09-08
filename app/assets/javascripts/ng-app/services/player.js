@@ -1,7 +1,7 @@
 angular.module('notSetApp')
-  .service( 'Player', [ '$rootScope', Player])
+  .service( 'Player', [ '$rootScope', '$timeout', 'Game', Player])
 
-function Player($rootScope){
+function Player($rootScope, $timeout, Game){
   var service = {
     players: [
     {
@@ -46,9 +46,31 @@ function Player($rootScope){
       }
     ],
     time: "notimer",
-    // timePenalty: function(){
-    //   if (service.attemptTimer == 0)
-    // }
+    cardsSelectable: false,
+    unlocked: true,
+    timePenalty: function(){
+      if (service.attemptTimer[0] == 0) {
+        service.deductPoints()
+        service.reset()
+        return 
+      } else {
+        service.attemptTimer[0] -=1000
+        return timePenaltyProm = $timeout(service.timePenalty, 1000)
+      }
+    },
+    reset: function(){
+      $timeout.cancel(timePenaltyProm)
+      service.unlocked = true
+      Game.selectedCards = []
+      service.cardsSelectable = false
+      service.attemptTimer[0] = 0
+    },
+    deductPoints: function(){
+      service.players[service.currentPlayer].points--
+    },
+    addPoints: function(){
+      service.players[service.currentPlayer].points++
+    }
 
   }
   return service

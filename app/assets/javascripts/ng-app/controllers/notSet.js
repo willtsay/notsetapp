@@ -5,111 +5,38 @@ angular.module('notSetApp')
 function notSetCtrl($scope, $timeout, Game, Player){
   $scope.board = Game.board
   $scope.attemptTimer = Player.attemptTimer
-  $scope.gameOver = false
-  $scope.optionsPicked=false
-  $scope.unlocked = true
-  $scope.decktype = "endless"
   $scope.setPlayers = Player.players
   $scope.timer=Player.time
-  $scope.deckTypes = [
-    {
-      type: "endless",
-      text: "Endless Mode"      
-    },
-    {
-      type: "normal",
-      text: "Normal Mode"
-    }
-  ]
   $scope.timerTypes = Player.timerTypes
+  $scope.optionsPicked=false
+  $scope.answer = Game.answer
+  $scope.decktype = "endless"
+  $scope.deckTypes = Game.deckTypes
   $scope.selectCard = function($index){
-    if (Game.cardsSelectable && Game.cardNotSelected($index)) {
+    if (Player.cardsSelectable && Game.cardNotSelected($index)) {
       if (Game.cardNotSelected($index)){
         Game.addToSelectedCards($index)
         if (Game.threeCards()){
           if(Game.isSelectedSet()){
-            Player.players[Player.currentPlayer].points++
-            $scope.replaceUsedCards()
+            Player.addPoints()
+            Game.replaceUsedCards()
             Game.selectedCards = []
-            if ($scope.checkResetNeeded(0)) {
-              $scope.makeSolvableBoard()
+            if (Game.checkResetNeeded(0)) {
+              Game.makeSolvableBoard()
             }
           } else {
-            Player.players[Player.currentPlayer].points--
+            Player.deductPoints()
           }
-          $scope.resetStatuses()
+          Player.reset()
         }
       }
-    }
-  }
-  $scope.drawCard = function(){
-    var keys = Object.keys(Game.deck)
-    var randomProp = keys[Math.floor(Math.random()*keys.length)]
-    var card = Game.deck[randomProp] 
-    delete Game.deck[randomProp]
-    return card
-
-  }
-  $scope.checkResetNeeded = function(start){
-    if (start == 10) {
-      return true
-    } else {
-      for(i = start+1; i < 11; i++) {
-        var second = i
-        for(b=second+1; b < 12; b++){
-
-          if ($scope.isValidSet(Game.board[start],Game.board[second],Game.board[b])) {
-            $scope.answer= (start+1)+","+(second+1)+","+(b+1)
-            return false
-          } 
-        }     
-      }
-      return $scope.checkResetNeeded(start+1)
-    }
-  }
-  $scope.isValidSet = function(card1,card2,card3){
-    var c1=card1.stats,c2=card2.stats,c3=card3.stats
-    if (card1.empty || card2.empty || card3.empty) {
-      return false
-    }
-    for (c=0; c<4; c++) {
-      if ((c1[c]==c2[c] && c2[c]==c3[c]) || (c1[c]!=c2[c] && c2[c]!=c3[c] && c1[c]!=c3[c])){   
-      } else {
-        return false
-      }
-    }
-    return true
-  }
-  $scope.reshuffle = function(){
-    for (i= 0; i<12; i++){
-      Game.deck[Game.board[i].id] = Game.board[i]
-    }
-    Game.board = []
-  }
-
-  $scope.decklength = function(){
-    return Object.keys(Game.deck).length
-  }
-  $scope.deckUnsolvable = function(start,deck){
-    if (start >= deck.length-2) {
-      return true
-    } else {
-      for(x = start+1; x < deck.length-1; x++) {
-        var second = x
-        for(y=second+1; y < deck.length; y++){
-          if ($scope.isValidSet(deck[start],deck[second],deck[y])) {
-            return false
-          } 
-        }     
-      }
-      return $scope.deckUnsolvable(start+1, deck)
     }
   }
   $scope.inSelectedCards = function($index){
     return ($.inArray(Game.board[$index], Game.selectedCards) != -1)
   }
   $scope.replaceUsedCards = function(){
-    if ($scope.decklength() < 3) { 
+    if (Game.deckLength() < 3) { 
       for(i=0; i<3; i++) {
       var change = Game.board.indexOf(Game.selectedCards[i])
       Game.board[change] = new emptyCard()
@@ -117,7 +44,7 @@ function notSetCtrl($scope, $timeout, Game, Player){
     } else {
       for (i=0; i<3; i++) {
         var change = Game.board.indexOf(Game.selectedCards[i])
-        Game.board[change] = $scope.drawCard()
+        Game.board[change] = Game.drawCard()
       }
     }
     if ($scope.decktype =="endless") {
@@ -127,83 +54,41 @@ function notSetCtrl($scope, $timeout, Game, Player){
     }
   }
   $scope.attemptSet = function(player){
-  if (!$scope.gameOver) { 
-    Game.cardsSelectable = true
-    Player.attemptTimer[0] = 5000
-    Player.currentPlayer = player
-    prom = $timeout($scope.timePenalty,1000)
+    if (!Game.gameOver && Player.unlocked) { 
+      Player.cardsSelectable = true
+      Player.attemptTimer[0] = 5000
+      Player.currentPlayer = player
+      timePenaltyProm = $timeout(Player.timePenalty,1000)
     }
   }
   $scope.hotAttemptSet = function(event){
     if ($scope.optionsPicked){
-      if ($scope.unlocked) {
+      if (Player.unlocked) {
         if (event.which == 113){
-          $scope.unlocked = false
           $scope.attemptSet(0)
+          Player.unlocked = false
         }
         if (event.which == 122){
-          $scope.unlocked = false
           $scope.attemptSet(2)
+          Player.unlocked = false
         }
         if (event.which == 111){
-          $scope.unlocked = false
           $scope.attemptSet(1)
+          Player.unlocked = false
         }
         if (event.which == 109){
-          $scope.unlocked = false
           $scope.attemptSet(3)
+          Player.unlocked = false
         }
-
       }
     } 
   }
-  $scope.timePenalty = function(){
-    if (Player.attemptTimer[0] == 0) {
-      Player.players[Player.currentPlayer].points--
-      $scope.resetStatuses()
-    } else {
-      Player.attemptTimer[0] -= 1000
-      prom = $timeout($scope.timePenalty,1000)
-    }
-  }
-  $scope.resetStatuses = function(){
-    $timeout.cancel(prom)
-    $scope.unlocked = true
-    $scope.attemptTimer[0] = 0
-    Game.cardsSelectable = false
-    Game.selectedCards = []
-  }
-  $scope.makeBoard = function(){
-    for (i = 0; i < 12; i++) {
-      Game.board[i] = $scope.drawCard()
-    }
-  }
-  $scope.makeSolvableBoard = function(){
-    // move board back into deck, redeal the board.
-    if ( $scope.decklength() <= 20) {
-      var deckAsArray = []
-      for(card in Game.deck){
-        deckAsArray.push(Game.deck[card])
-      } 
-      if ($scope.deckUnsolvable(0, deckAsArray)){
-        console.log("game over")
-        $scope.gameOver = true
-        return
-      }
-    } else {
-      $scope.reshuffle()
-      $scope.makeBoard()
-      if ($scope.checkResetNeeded(0)){
-        return $scope.makeSolvableBoard()
-      }
-    }
-  }
   $scope.selectDeckType = function(deckType){
-    console.log("hello")
     $scope.decktype = deckType
   }
   $scope.selectTimerType = function(timerType){
     Player.time = timerType
+    $scope.timer = Player.time
   }
   $scope.goToGame = function(players){
     if ($scope.decktype && Player.time) {
@@ -213,98 +98,13 @@ function notSetCtrl($scope, $timeout, Game, Player){
         $timeout($scope.gameTimer, 1000)      
       }
     }
-
   }
   $scope.gameTimer = function(){
     if (Player.time == 0){
-      $scope.gameOver = true
+      Game.gameOver = true
     } else {
       Player.time = Player.time-1000
       $timeout($scope.gameTimer, 1000)  
     }
   }
-
 }
-
-//SET UP FUNCTIONS
-function Card(id, colour,shape,shading,number){
-  this.empty = false
-  this.id = id
-  this.shape_t = ["triangle","rectangle","diamond"]
-  this.shading_t = ["border", "solid", "stripe"]
-  this.number_t = [1,2,3]
-  this.colour_t = ["b-01.png","g-01.png","r-01.png"]
-  this.location = "/images/setimages/" + this.shape_t[shape] + "/"+ this.shading_t[shading] + "/"+ this.number_t[number] + this.colour_t[colour]
-  this.stats = [shape+1,shading+1,number+1,colour+1]
-}
-
-function emptyCard(){
-  this.empty = true
-  this.location = "/images/setimages/emptyset.png"
-}
-
-function makeObjectDeck(){
-  deck = {}
-  for (i = 0; i < 81; i++){
-    deck[i] = new Card(i, i%3, Math.floor(i/3)%3, Math.floor(i/9)%3, Math.floor(i/27)%3)
-  }
-  return deck
-}
-
-function drawCard(deck){
-  var keys = Object.keys(deck)
-  var randomProp = keys[Math.floor(Math.random()*keys.length)] 
-  var card = deck[randomProp]
-  delete deck[randomProp]
-  return card
-}
-
-
-function makeFirstSolvableBoard(deck){
-  board = []
-  for (i=0;i<12;i++) {
-    board.push(drawCard(deck))
-  }
-  if (!solvableBoard(board,0)) {
-    reshuffle(board, deck)
-    return makeFirstSolvableBoard(deck)
-  }
-  return board
-}
-
-
-function solvableBoard(board,start){
-  if (start == 10) {
-    return false
-  } else {
-    for(i = start+1; i < 11; i++) {
-      var second = i
-      for(b=second+1; b < 12; b++){
-        if (isValidSet(board[start],board[second],board[b])) {
-          return true
-        }
-      }     
-    }
-    return solvableBoard(board,start+1)
-  }
-}
-
-function reshuffle(board, deck){
-  for (i= 0; i<12; i++){
-    deck[board[i].id] = board[i]
-  }
-  board = []
-}
-
-function isValidSet(card1,card2,card3){
-  var c1=card1.stats,c2=card2.stats,c3=card3.stats
-  for (c=0; c<4; c++) {
-    if ((c1[c]==c2[c] && c2[c]==c3[c]) || (c1[c]!=c2[c] && c2[c]!=c3[c] && c1[c]!=c3[c])){   
-    } else {
-      return false
-    }
-  }
-  return true
-}
-
-

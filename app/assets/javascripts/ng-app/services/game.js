@@ -10,22 +10,30 @@ var board = makeFirstSolvableBoard(deck)
 
 
 angular.module('notSetApp')
-  .service( 'Game', [ '$rootScope', Game])
+  .service( 'Game', ['$rootScope', Game])
 
 function Game($rootScope){
   var service = {
-    cardsSelectable: false,
     selectedCards: [],
     deck: deck,
+    deckType:"normal",
+    deckTypes: [
+      {
+        type: "endless",
+        text: "Endless Mode"      
+      },
+      {
+        type: "normal",
+        text: "Normal Mode"
+      }
+    ],
     board: board,
+    answer:[""],
+    gameOver: false,
     consolidate: function(){
-      for (i= 0; i<12; i++){
+      for (i=0; i<12; i++){
         service.deck[service.board[i].id] = service.board[i]
       }
-      service.board = []
-    },
-    makeSolvableBoard: function(){
-
     },
     cardNotSelected: function(index){
       return ($.inArray(service.board[index], service.selectedCards) == -1)
@@ -48,7 +56,104 @@ function Game($rootScope){
         }
       }
       return true
+    },
+    deckLength: function(){
+      return Object.keys(service.deck).length
+    },
+    drawCard: function(){
+      var keys = Object.keys(service.deck)
+      var randomProp = keys[Math.floor(Math.random()*keys.length)]
+      var card = service.deck[randomProp] 
+      delete service.deck[randomProp]
+      return card
+    },
+    replaceUsedCards: function(){
+      if (service.deckLength() < 3) { 
+        for(i=0; i<3; i++) {
+        var change = service.board.indexOf(service.selectedCards[i])
+        service.board[change] = new emptyCard()
+        }
+      } else {
+        for (i=0; i<3; i++) {
+          var change = service.board.indexOf(service.selectedCards[i])
+          service.board[change] = service.drawCard()
+        }
+      }
+      if (service.deckType =="endless") {
+        for (i=0; i<3; i++) {
+          service.deck[service.selectedCards[i].id]=service.selectedCards[i]
+      }
     }
+    },
+    isValidSet: function(card1,card2,card3){
+      var c1=card1.stats,c2=card2.stats,c3=card3.stats
+      if (card1.empty || card2.empty || card3.empty) {
+        return false
+      }
+      for (c=0; c<4; c++) {
+        if ((c1[c]==c2[c] && c2[c]==c3[c]) || (c1[c]!=c2[c] && c2[c]!=c3[c] && c1[c]!=c3[c])){   
+        } else {
+          return false
+        }
+      }
+      return true
+    },
+    checkResetNeeded: function(start){
+      if (start == 10) {
+        return true
+      } else {
+        for(i = start+1; i < 11; i++) {
+          var second = i
+          for(b=second+1; b < 12; b++){
+            if (service.isValidSet(service.board[start],service.board[second],service.board[b])) {
+              service.answer[0]= (start+1)+","+(second+1)+","+(b+1)
+              return false
+            } 
+          }     
+        }
+        return service.checkResetNeeded(start+1)
+      }
+
+    },
+    deckUnsolvable: function(start, deck){
+      if (start >= deck.length-2) {
+        return true
+      } else {
+        for(x = start+1; x < deck.length-1; x++) {
+          var second = x
+          for(y=second+1; y < deck.length; y++){
+            if (service.isValidSet(deck[start],deck[second],deck[y])) {
+              return false
+            } 
+          }     
+        }
+        return service.deckUnsolvable(start+1, deck)
+      }
+    },
+    makeBoard: function(){
+      for (i=0;i<12;i++) {
+        service.board[i] = service.drawCard()
+      }
+    },
+    makeSolvableBoard: function(){
+      if ( service.deckLength() <= 20) {
+        var deckAsArray = []
+        for(card in service.deck){
+          deckAsArray.push(service.deck[card])
+        } 
+        if (service.deckUnsolvable(0, deckAsArray)){
+          console.log("game over")
+          service.gameOver = true
+          return
+        }
+      } else {
+        service.consolidate()
+        service.makeBoard()
+        if (service.checkResetNeeded(0)){
+          return service.makeSolvableBoard()
+        }
+      }
+    },
   }
   return service
 }
@@ -62,6 +167,11 @@ function Card(id, colour,shape,shading,number){
   this.colour_t = ["b-01.png","g-01.png","r-01.png"]
   this.location = "/images/setimages/" + this.shape_t[shape] + "/"+ this.shading_t[shading] + "/"+ this.number_t[number] + this.colour_t[colour]
   this.stats = [shape+1,shading+1,number+1,colour+1]
+}
+
+function emptyCard(){
+  this.empty = true
+  this.location = "/images/setimages/emptyset.png"
 }
 
 function drawCard(deck){
