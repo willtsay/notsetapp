@@ -61,11 +61,6 @@ div {
   display:inline-block;
 }
 
-.card-block{
-/*  width:200px;
-  height:150px;*/
-  /*padding:20px 40px;*/
-}
 
 .board{
   width:800px;
@@ -96,43 +91,27 @@ div:focus {
   background-color: yellow;
 }
 
+.lower {
+  z-index:-1;
+}
+
 .selected {
-
+  position: relative;
 }
 
-.cards.ng-enter,
-.cards.ng-leave,
-.cards.ng-move {
-  -webkit-transition: 0.5s linear all;
-  -moz-transition: 0.5s linear all;
-  -o-transition: 0.5s linear all;
-  transition: 0.5s linear all;
+.selected:before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom:3px;
+  left: 0;
+  right: 0;
+  border-radius:12px;
+  background: rgba(0,0,0, 0.20);
+  -moz-transition: background .3s linear;
+  -webkit-transition: background .3s linear;
+  -o-transition: background .3s linear;
+  transition: background .3s linear;
 }
 
-.cards.ng-enter,
-.cards.ng-move {
-  opacity: 0;
-  height: 0;
-  overflow: hidden;
-}
-
-.cards.ng-move.ng-move-active,
-.cards.ng-enter.ng-enter-active {
-  opacity: 1;
-  height: 120px;
-}
-
-.cards.ng-leave {
-  opacity: 1;
-  overflow: hidden;
-}
-
-.cards.ng-leave.ng-leave-active {
-  opacity: 0;
-  height: 0;
-  padding-top: 0;
-  padding-bottom: 0;
-}
-/*.make-fat{
-  padding:200px 150px;
-}*/

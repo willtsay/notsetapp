@@ -20,15 +20,13 @@
 
 <!-- PARTIALS? -->
   <div ng-show="optionsPicked">
-    <span ng-repeat="player in setPlayers" ng-click="attemptSet(player.id)"  class={{player.color}}>{{player.text}}</span>
+    <span ng-repeat="player in setPlayers" ng-click="attemptSet(player.id)"  class="{{player.color}} ">{{player.text}}</span>
     </br><span ng-repeat="player in setPlayers" class={{player.color}}>{{player.color}} points: {{player.points}}</span>
 
     <div ng-show="timer!='notimer'">TIME:{{ timer | date: 'mm:ss'}} </div>
     <div>SET ATTEMPT TIMER:{{ attemptTimer[0] | date: 's'}}</div>
     <div class="board">
-      <div ng-repeat="card in board track by $index" class="test card-block cards">
-        <img ng-click="selectCard($index)" ng-class="{'selected': inSelectedCards($index)}" ng-src="{{card.location}}">
-      </div>
+      <div ng-repeat="card in board track by $index" class="test" ng-class="{'selected':inSelectedCards($index)}"><img class="cards lower" ng-click="selectCard($index)" ng-src="{{card.location}}"></div>
       <div>{{answer[0]}}</div>
     </div>
   </div>
