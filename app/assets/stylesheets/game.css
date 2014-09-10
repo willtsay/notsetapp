@@ -1,6 +1,8 @@
 body {
   font-family: sans-serif;
   -webkit-tap-highlight-color: rgba(0,0,0,0);
+  margin:0;
+  padding:0;
 }
 
 .highlighted {
@@ -54,6 +56,15 @@ div {
   margin-right: auto;
 }
 
+.player-button {
+  font-size:3em;
+  text-align:center;
+  display:inline-block;
+  width:176px;
+  height:60px;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+}
 
 
 
@@ -72,7 +83,8 @@ div:focus {
 }
 
 .red {
-  background-color: red;
+  color:#e76765;
+  background-color:#ca0000;
 }
 
 .gray {
@@ -80,15 +92,18 @@ div:focus {
 }
 
 .green {
-  background-color: green;
+  color:#81e663;
+  background-color: #00b900;
 }
 
 .blue {
-  background-color: blue;
+  color:#9aaeff;
+  background-color:#4472ff;
 }
 
-.yellow {
-  background-color: yellow;
+.purple {
+  color:#8c53d2;
+  background-color: #5000b6;
 }
 
 .lower {
