@@ -1,20 +1,20 @@
 <!-- PARTIAL?  -->
-<div tabindex="0" ng-keypress="hotAttemptSet($event)">
-
-  <div ng-show="!optionsPicked">
-    GAME MODE
+<div class="game-wrapper" tabindex="0" ng-keypress="hotAttemptSet($event)">
+  <div ng-show="!optionsPicked" class="options-container">
+    <div class="category center-div rounded-border">GAME MODE</div>
     <div>
-      <span ng-repeat="option in deckTypes" ng-click="selectDeckType(option.type)" ng-class="{'highlighted':decktype==option.type}">{{option.text}}</span>
+      <div class="option center-div gray" ng-repeat="option in deckTypes" ng-click="selectDeckType(option.type)" ng-class="{'highlighted':decktype==option.type}">{{option.text}}
+      </div>
     </div>
-    TIME LIMIT
+    <div class="category center-div rounded-border">TIME LIMIT</div>
     <div>
-      <span ng-repeat="option in timerTypes" ng-click="selectTimerType(option.type)" ng-class="{'highlighted':timer==option.type}">{{option.text}}</span>
+      <div class="option center-div gray" ng-repeat="option in timerTypes" ng-click="selectTimerType(option.type)" ng-class="{'highlighted':timer==option.type}">{{option.text}}</div>
     </div>
-    NUMBER OF PLAYERS
-    <div>
+    <div class="category center-div rounded-border">PLAYERS</div>
+    <div class="slider">
       <input type="range" min="1" max="4" ng-init="players=1" ng-model="players"> {{players}}
     </div>
-    <div ng-click="goToGame(players)">PLAY GAME</div>
+    <div ng-click="goToGame(players)" class="button">PLAY GAME</div>
   </div>
 
 
@@ -24,12 +24,12 @@
     </br><span ng-repeat="player in setPlayers" class={{player.color}}>{{player.color}} points: {{player.points}}</span>
 
     <div ng-show="timer!='notimer'">TIME:{{ timer | date: 'mm:ss'}} </div>
-    <div>SET ATTEMPT TIMER:{{ attemptTimer | date: 's'}}</div>
+    <div>SET ATTEMPT TIMER:{{ attemptTimer[0] | date: 's'}}</div>
     <div class="board">
       <div ng-repeat="card in board track by $index" class="test card-block cards">
-        <img ng-click="selectCard($index)" ng-class="{'highlighted': inSelectedCards($index)}" ng-src="{{card.location}}">
+        <img ng-click="selectCard($index)" ng-class="{'selected': inSelectedCards($index)}" ng-src="{{card.location}}">
       </div>
-      <div>{{answer}}</div>
+      <div>{{answer[0]}}</div>
     </div>
   </div>
 </div>

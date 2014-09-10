@@ -4,12 +4,58 @@ body {
 }
 
 .highlighted {
-  background-color: blue;
+  color: black !important;
+}
+
+input {
+  padding:2px;
+  margin:10px;
 }
 
 div {
   cursor:pointer;
 }
+
+.button {
+  padding:2px;
+  display:inline;
+  font-size: 1.25em;
+  border: 3px solid black;
+  border-radius:10px;
+}
+
+.game-wrapper {
+  width: 100%;
+}
+
+.center-div {
+  margin:0 auto;
+}
+
+.rounded-border {
+  width: 275px;
+  border: 4px solid black;
+  border-radius:13px;
+}
+
+.category {
+  font-size: 2em;
+}
+
+.option {
+  margin:10px auto;
+  padding:10px 0;
+  width:275px;
+}
+.options-container {
+  text-align: center;
+  width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+
 
 .test{
   display:inline-block;
@@ -30,20 +76,28 @@ div:focus {
     outline:none;
 }
 
-.red{
+.red {
   background-color: red;
 }
 
-.green{
+.gray {
+  color:gray;
+}
+
+.green {
   background-color: green;
 }
 
-.blue{
+.blue {
   background-color: blue;
 }
 
-.yellow{
+.yellow {
   background-color: yellow;
+}
+
+.selected {
+
 }
 
 .cards.ng-enter,
