@@ -20,7 +20,7 @@
 
 <!-- PARTIALS? -->
   <div ng-show="optionsPicked">
-    <span ng-repeat="player in setPlayers" ng-click="attemptSet(player.id)"  class={{player.color}}>{{player.text}}</span>
+    <span ng-repeat="player in setPlayers" ng-click="attemptSet(player.id)"  class="{{player.color}} ">{{player.text}}</span>
     </br><span ng-repeat="player in setPlayers" class={{player.color}}>{{player.color}} points: {{player.points}}</span>
 
     <div ng-show="timer!='notimer'">TIME:{{ timer | date: 'mm:ss'}} </div>
