@@ -8,25 +8,54 @@ function Player($rootScope, $timeout, Game){
       id: 0,
       color: 'blue',
       text:"Q",
-      points: 0
+      points: 0,
+      get display(){
+        if (service.currentPlayer !== this.id){
+          return this.text+": "+this.points          
+        }  else {
+          return (service.attemptTimer[0]+1000)/1000
+        }
+      }
     },
     {
       id: 1,
       color: 'red',
       text:"O",
-      points: 0
+      points: 0,
+      get display(){
+        if (service.currentPlayer !== this.id){
+          return this.text+": "+this.points          
+        }  else {
+          return (service.attemptTimer[0]+1000)/1000
+        }
+
+      }      
     },
     {
       id: 2,
       color: 'green',
       text:"Z",
-      points: 0
+      points: 0,
+      get display(){
+        if (service.currentPlayer !== this.id){
+          return this.text+": "+this.points          
+        }  else {
+          return (service.attemptTimer[0]+1000)/1000
+        }
+      }      
     },
     {
       id: 3,
       color: 'purple',
       text:"M",
-      points:0
+      points: 0,
+      get display(){
+        if (service.currentPlayer !== this.id){
+          return this.text+": "+this.points          
+        }  else {
+          return (service.attemptTimer[0]+1000)/1000
+        }
+      }    
     }],
     cullPlayers: function(amount){
       for(i=0;i<4-amount;i++) {
@@ -60,6 +89,7 @@ function Player($rootScope, $timeout, Game){
     },
     reset: function(){
       $timeout.cancel(timePenaltyProm)
+      service.currentPlayer= false
       service.unlocked = true
       Game.selectedCards = []
       service.cardsSelectable = false

@@ -11,7 +11,10 @@ function notSetCtrl($scope, $timeout, Game, Player){
   $scope.decktype = "endless"
   $scope.deckTypes = Game.deckTypes
   $scope.timer=Player.time
-  $scope.timerTypes = Player.timerTypes
+  $scope.setPlayerText = function(index){
+
+  }
+  $scope.timerTypes = Player.timerTypes 
   $scope.selectCard = function($index){
     if (Player.cardsSelectable && Game.cardNotSelected($index)) {
       if (Game.cardNotSelected($index)){
@@ -56,7 +59,7 @@ function notSetCtrl($scope, $timeout, Game, Player){
   $scope.attemptSet = function(player){
     if (!Game.gameOver && Player.unlocked) { 
       Player.cardsSelectable = true
-      Player.attemptTimer[0] = 5000
+      Player.attemptTimer[0] = 4000
       Player.currentPlayer = player
       timePenaltyProm = $timeout(Player.timePenalty,1000)
     }
@@ -104,6 +107,7 @@ function notSetCtrl($scope, $timeout, Game, Player){
       Game.gameOver = true
     } else {
       Player.time = Player.time-1000
+      $scope.timer = Player.time
       $timeout($scope.gameTimer, 1000)  
     }
   }
