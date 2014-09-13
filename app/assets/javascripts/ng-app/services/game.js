@@ -16,7 +16,7 @@ function Game($rootScope){
   var service = {
     selectedCards: [],
     deck: deck,
-    deckType:"normal",
+    deckType:"endless",
     deckTypes: [
       {
         type: "endless",
@@ -70,20 +70,22 @@ function Game($rootScope){
     replaceUsedCards: function(){
       if (service.deckLength() < 3) { 
         for(i=0; i<3; i++) {
-        var change = service.board.indexOf(service.selectedCards[i])
-        service.board[change] = new emptyCard()
+          var change = service.board.indexOf(service.selectedCards[i])
+          service.board[change] = new emptyCard()
         }
       } else {
         for (i=0; i<3; i++) {
+          console.log("derp")
           var change = service.board.indexOf(service.selectedCards[i])
           service.board[change] = service.drawCard()
+          if (service.deckType == "endless") {
+            console.log("hello")
+            for (i=0; i<3; i++) {
+              service.deck[service.selectedCards[i].id]=service.selectedCards[i]
+            } 
+          }
         }
       }
-      if (service.deckType =="endless") {
-        for (i=0; i<3; i++) {
-          service.deck[service.selectedCards[i].id]=service.selectedCards[i]
-      }
-    }
     },
     isValidSet: function(card1,card2,card3){
       var c1=card1.stats,c2=card2.stats,c3=card3.stats

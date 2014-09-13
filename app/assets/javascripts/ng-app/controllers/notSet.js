@@ -11,9 +11,6 @@ function notSetCtrl($scope, $timeout, Game, Player){
   $scope.decktype = "endless"
   $scope.deckTypes = Game.deckTypes
   $scope.timer=Player.time
-  $scope.setPlayerText = function(index){
-
-  }
   $scope.timerTypes = Player.timerTypes 
   $scope.selectCard = function($index){
     if (Player.cardsSelectable && Game.cardNotSelected($index)) {
@@ -37,24 +34,6 @@ function notSetCtrl($scope, $timeout, Game, Player){
   }
   $scope.inSelectedCards = function($index){
     return ($.inArray(Game.board[$index], Game.selectedCards) != -1)
-  }
-  $scope.replaceUsedCards = function(){
-    if (Game.deckLength() < 3) { 
-      for(i=0; i<3; i++) {
-      var change = Game.board.indexOf(Game.selectedCards[i])
-      Game.board[change] = new emptyCard()
-      }
-    } else {
-      for (i=0; i<3; i++) {
-        var change = Game.board.indexOf(Game.selectedCards[i])
-        Game.board[change] = Game.drawCard()
-      }
-    }
-    if ($scope.decktype =="endless") {
-      for (i=0; i<3; i++) {
-        Game.deck[Game.selectedCards[i].id]=Game.selectedCards[i]
-      }
-    }
   }
   $scope.attemptSet = function(player){
     if (!Game.gameOver && Player.unlocked) { 
@@ -98,7 +77,7 @@ function notSetCtrl($scope, $timeout, Game, Player){
       $scope.optionsPicked = true
       Player.cullPlayers(players)
       if (Player.time != "notimer") {
-        $timeout($scope.gameTimer, 1000)      
+        $timeout($scope.gameTimer, 1000)    
       }
     }
   }
