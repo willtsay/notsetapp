@@ -1,8 +1,8 @@
 angular.module('notSetApp')
-  .controller('notSetCtrl', ['$scope', '$timeout', 'Game', 'Player', 'socket', notSetCtrl])
+  .controller('notSetCtrl', ['$scope', 'Game', 'Player', 'socket', notSetCtrl])
 
 
-function notSetCtrl($scope, $timeout, Game, Player, socket){
+function notSetCtrl($scope, Game, Player, socket){
   $scope.board = Game.board
   $scope.attemptTimer = Player.attemptTimer
   $scope.setPlayers = Player.players
