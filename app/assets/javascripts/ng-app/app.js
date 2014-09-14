@@ -2,8 +2,9 @@ angular
   .module('notSetApp', [
       'ngAnimate',
       'ui.router',
-      'templates'
-  ]).config(function ($stateProvider, $urlRouterProvider, $locationProvider){
+      'templates', 'socket.io'
+  ]).config(function ($stateProvider, $urlRouterProvider, $locationProvider, socketProvider){
+    socketProvider.setConnectionUrl('http://localhost:8080')
     $stateProvider
       .state('notSet', {
         url: '/',

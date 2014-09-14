@@ -1,8 +1,8 @@
 angular.module('notSetApp')
-  .controller('notSetCtrl', ['$scope', '$timeout', 'Game', 'Player', notSetCtrl])
+  .controller('notSetCtrl', ['$scope', '$timeout', 'Game', 'Player', 'socket', notSetCtrl])
 
 
-function notSetCtrl($scope, $timeout, Game, Player){
+function notSetCtrl($scope, $timeout, Game, Player, socket){
   $scope.board = Game.board
   $scope.attemptTimer = Player.attemptTimer
   $scope.setPlayers = Player.players
@@ -12,6 +12,15 @@ function notSetCtrl($scope, $timeout, Game, Player){
   $scope.deckTypes = Game.deckTypes
   $scope.timer=Player.time
   $scope.timerTypes = Player.timerTypes 
+  $scope.color = "purple"
+
+  socket.on('change:color', function(data){
+    $scope.color = data
+  })
+
+  $scope.changeColor = function(kolor){
+    socket.emit('change:color', kolor)
+  }
   $scope.selectCard = function($index){
     if (Player.cardsSelectable && Game.cardNotSelected($index)) {
       if (Game.cardNotSelected($index)){

@@ -1,6 +1,10 @@
 <!-- PARTIAL?  -->
 <div class="game-wrapper" tabindex="0" ng-keypress="hotAttemptSet($event)">
   <div ng-show="!optionsPicked" class="options-container">
+    <div ng-click="changeColor('red')">RED</div>
+    <div ng-click="changeColor('blue')">BLUE</div>
+    <div ng-click="changeColor('green')">GREEN</div>
+    <div class={{color}}>WOOOOOO COLORS</div>
     <div class="category center-div rounded-border">GAME MODE</div>
     <div>
       <div class="option center-div gray" ng-repeat="option in deckTypes" ng-click="selectDeckType(option.type)" ng-class="{'highlighted':decktype==option.type}">{{option.text}}
