@@ -75,15 +75,13 @@ function Game($rootScope){
         }
       } else {
         for (i=0; i<3; i++) {
-          console.log("derp")
           var change = service.board.indexOf(service.selectedCards[i])
           service.board[change] = service.drawCard()
-          if (service.deckType == "endless") {
-            console.log("hello")
-            for (i=0; i<3; i++) {
-              service.deck[service.selectedCards[i].id]=service.selectedCards[i]
-            } 
-          }
+        }
+        if (service.deckType == "endless") {
+          for (i=0; i<3; i++) {
+            service.deck[service.selectedCards[i].id]=service.selectedCards[i]
+          } 
         }
       }
     },
