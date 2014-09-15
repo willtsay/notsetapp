@@ -4,7 +4,7 @@ angular
       'ui.router',
       'templates', 'socket.io'
   ]).config(function ($stateProvider, $urlRouterProvider, $locationProvider, socketProvider){
-    socketProvider.setConnectionUrl('http://localhost:8080')
+    socketProvider.setConnectionUrl('http://quiet-journey-3472.herokuapp.com/')
     $stateProvider
       .state('notSet', {
         url: '/',
