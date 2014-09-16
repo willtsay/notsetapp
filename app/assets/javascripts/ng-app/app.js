@@ -4,7 +4,7 @@ angular
       'ui.router',
       'templates', 'socket.io'
   ]).config(function ($stateProvider, $urlRouterProvider, $locationProvider, socketProvider){
-    socketProvider.setConnectionUrl('http://quiet-journey-3472.herokuapp.com/')
+    socketProvider.setConnectionUrl(getServer())
     $stateProvider
       .state('notSet', {
         url: '/',
@@ -14,3 +14,11 @@ angular
     $urlRouterProvider.otherwise('/')
     $locationProvider.html5Mode(true)
   })
+
+getServer = function(){
+  if (window.location.host == "notset.herokuapp.com"){
+    return "http://quiet-journey-3472.herokuapp.com/"
+  } else {
+    return "http://localhost:8080"
+  }
+}
