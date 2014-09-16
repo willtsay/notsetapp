@@ -14,6 +14,14 @@ function notSetCtrl($scope, $timeout, Game, Player, socket){
   $scope.timerTypes = Player.timerTypes 
   $scope.color = "purple"
 
+  socket.on('get:room', function(data){
+    $scope.rooms = data
+  })
+
+  $scope.getRoom = function(){
+    socket.emit('get:room')
+  }
+
   socket.on('change:color', function(data){
     $scope.color = data
   })
