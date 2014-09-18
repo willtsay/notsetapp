@@ -12,23 +12,6 @@ function notSetCtrl($scope, $timeout, Game, Player, socket){
   $scope.deckTypes = Game.deckTypes
   $scope.timer=Player.time
   $scope.timerTypes = Player.timerTypes 
-  $scope.color = "purple"
-
-  socket.on('get:room', function(data){
-    $scope.rooms = data
-  })
-
-  $scope.getRoom = function(){
-    socket.emit('get:room')
-  }
-
-  socket.on('change:color', function(data){
-    $scope.color = data
-  })
-
-  $scope.changeColor = function(kolor){
-    socket.emit('change:color', kolor)
-  }
   $scope.selectCard = function($index){
     if (Player.cardsSelectable && Game.cardNotSelected($index)) {
       if (Game.cardNotSelected($index)){

@@ -11,6 +11,11 @@ angular
         templateUrl: 'notSet.html',
         controller: 'notSetCtrl'
       })
+      .state('multi', {
+        url: '/multi',
+        templateUrl: 'notSetMulti.html',
+        controller: 'multiSetCtrl'
+      })
     $urlRouterProvider.otherwise('/')
     $locationProvider.html5Mode(true)
   })

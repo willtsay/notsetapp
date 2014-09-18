@@ -1,16 +1,6 @@
 <!-- PARTIAL?  -->
 <div class="game-wrapper" tabindex="0" ng-keypress="hotAttemptSet($event)">
   <div ng-show="!optionsPicked" class="options-container">
-    <div ng-click="changeColor('red')">RED</div>
-    <div ng-click="changeColor('blue')">BLUE</div>
-    <div ng-click="changeColor('green')">GREEN</div>
-    <div class={{color}}>WOOOOOO COLORS</div>
-
-    <div ng-click="getRoom()">GET MY ROOM</div>
-
-    <div>{{rooms}}</div>
-
-
     <div class="category center-div rounded-border">GAME MODE</div>
     <div>
       <div class="option center-div gray" ng-repeat="option in deckTypes" ng-click="selectDeckType(option.type)" ng-class="{'highlighted':decktype==option.type}">{{option.text}}
@@ -31,7 +21,7 @@
     <div ng-repeat="player in setPlayers" ng-click="attemptSet(player.id)" class="{{player.color}} player-button">{{player.display}}</div>
     <div class="board">
       <div ng-repeat="card in board track by $index" class="test" ng-class="{'selected':inSelectedCards($index)}"><img class="cards lower" ng-click="selectCard($index)" ng-src="{{card.location}}"></div>
-      <div>{{answer[0]}}</div>
+      <!-- <div>{{answer[0]}}</div> -->
       <div ng-show="timer!='notimer'">TIME:{{ timer | date: 'mm:ss'}} </div>
     </div>
   </div>

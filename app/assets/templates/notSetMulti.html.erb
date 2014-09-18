@@ -1,0 +1,23 @@
+<!-- have the host and join screen be the same for now -->
+<div>ROOM NAME</div>
+<input ng-model="roomToHost">
+<div>GAME MODE</div>
+
+<div>TIME LIMIT</div>
+<div>PLAYERS</div>
+
+
+<div ng-click="hostRoom()">HOST GAME</div>
+
+
+
+<div ng-click="joinRoom(roomToJoin)">JOIN ROOM</div>
+<div>{{rooms}}</div>
+<div ng-click="getRoom()">GET ROOM</div>
+<input ng-model="roomToSend">
+<input ng-model="messageToSend">
+<div>{{roomToSend}}</div>
+<div ng-click="sendMessageRoom()">SEND MESSAGE</div> 
+<div>{{message}}</div>
+
+
