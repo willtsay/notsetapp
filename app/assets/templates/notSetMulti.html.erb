@@ -1,23 +1,27 @@
-<!-- have the host and join screen be the same for now -->
-<div>ROOM NAME</div>
-<input ng-model="roomToHost">
-<div>GAME MODE</div>
+<div class="game-wrapper" tabindex="0" ng-keypress="hotAttemptSet($event)">
+  <div ng-show="!roomJoined">
+    <div>{{failureMessage}}</div>
+    <div>==========</div>
+    <div>
+      <div>Room Name</div>
+      <input ng-model="roomToHost">
+      <div ng-click="hostRoom()">HOST ROOM</div>
+    </div>
+    <div>==========</div>
+    <div>
+      <div>JOIN A ROOM</div>
+    <div>==========</div>
+      <div>ROOM NAME: <input ng-model="roomToJoin"></div>     
+      <div ng-click='joinRoom()'>JOIN ROOM</div>
+    </div>
+  </div> 
 
-<div>TIME LIMIT</div>
-<div>PLAYERS</div>
-
-
-<div ng-click="hostRoom()">HOST GAME</div>
-
-
-
-<div ng-click="joinRoom(roomToJoin)">JOIN ROOM</div>
-<div>{{rooms}}</div>
-<div ng-click="getRoom()">GET ROOM</div>
-<input ng-model="roomToSend">
-<input ng-model="messageToSend">
-<div>{{roomToSend}}</div>
-<div ng-click="sendMessageRoom()">SEND MESSAGE</div> 
-<div>{{message}}</div>
-
-
+  <div ng-show="roomJoined">
+    <div ng-repeat="player in setPlayers" ng-click="attemptSet(player.id)" class="{{player.color}} player-button" ng-show="player.active">{{player.display}}</div>
+    <div class="board">
+      <div ng-repeat="card in board track by $index" class="test" ng-class="{'selected':inSelectedCards($index)}"><img class="cards lower" ng-click="selectCard($index)" ng-src="{{card.location}}"></div>
+      <!-- <div>{{answer[0]}}</div> -->
+      <div ng-show="timer!='notimer'">TIME:{{ timer | date: 'mm:ss'}} </div>
+    </div>
+  </div>
+</div>

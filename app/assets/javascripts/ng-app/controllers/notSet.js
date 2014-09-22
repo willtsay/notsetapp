@@ -37,13 +37,14 @@ function notSetCtrl($scope, $timeout, Game, Player, socket){
   }
   $scope.attemptSet = function(player){
     if (!Game.gameOver && Player.unlocked) { 
+      Player.unlocked = false
       Player.cardsSelectable = true
       Player.attemptTimer[0] = 4000
       Player.currentPlayer = player
       timePenaltyProm = $timeout(Player.timePenalty,1000)
     }
   }
-  $scope.hotAttemptSet = function(event){
+  $scope.hotAttemptSet = function(){
     if ($scope.optionsPicked){
       if (Player.unlocked) {
         if (event.which == 113){
