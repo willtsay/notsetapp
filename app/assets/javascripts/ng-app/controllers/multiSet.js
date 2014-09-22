@@ -80,6 +80,7 @@ function multiSetCtrl($scope, $timeout, Game, Multiplayer, socket){
   })
   socket.on('reset:timers', function(data){
     Multiplayer.currentPlayer = data.currentPlayer
+    Multiplayer.unlocked = data.unlocked
     Game.selectedCards = data.selectedCards
     Multiplayer.cardsSelectable = data.cardsSelectable
     Multiplayer.attemptTimer[0] = data.attemptTimer
@@ -105,7 +106,33 @@ function multiSetCtrl($scope, $timeout, Game, Multiplayer, socket){
     Multiplayer.players[2].active = data.players[2].active
     Multiplayer.players[3].active = data.players[3].active
    }
-
+  socket.on('select:card', function(index){
+    Game.addToSelectedCards(index)
+  })
+  $scope.selectCard = function($index){
+    if (Multiplayer.cardsSelectable && Game.cardNotSelected($index)) {
+      if (Game.cardNotSelected($index)){
+        Game.addToSelectedCards($index)
+        socket.emit('select:card', $index)
+        if (Game.threeCards()){
+          if(Game.isSelectedSet()){
+            Multiplayer.addPoints()
+            Game.replaceUsedCards()
+            Game.selectedCards = []
+            if (Game.checkResetNeeded(0)) {
+              Game.makeSolvableBoard()
+            }
+          } else {
+            Multiplayer.deductPoints()
+          }
+          Multiplayer.reset()
+        }
+      }
+    }
+  }
+  $scope.inSelectedCards = function($index){
+    return ($.inArray(Game.board[$index], Game.selectedCards) != -1)
+  }
 
 
 
