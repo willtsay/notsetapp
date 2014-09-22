@@ -109,6 +109,12 @@ function multiSetCtrl($scope, $timeout, Game, Multiplayer, socket){
   socket.on('select:card', function(index){
     Game.addToSelectedCards(index)
   })
+  socket.on('update:board', function(data){
+    Game.board = data.board
+    $scope.board = Game.board
+    Game.deck = data.deck
+    $scope.deck = Game.deck
+  })
   $scope.selectCard = function($index){
     if (Multiplayer.cardsSelectable && Game.cardNotSelected($index)) {
       if (Game.cardNotSelected($index)){
@@ -118,6 +124,11 @@ function multiSetCtrl($scope, $timeout, Game, Multiplayer, socket){
           if(Game.isSelectedSet()){
             Multiplayer.addPoints()
             Game.replaceUsedCards()
+            var data = {
+              board:Game.board,
+              deck:Game.deck
+            }
+            socket.emit('update:board', data)
             Game.selectedCards = []
             if (Game.checkResetNeeded(0)) {
               Game.makeSolvableBoard()
