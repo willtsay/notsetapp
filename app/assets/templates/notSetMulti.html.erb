@@ -17,7 +17,8 @@
   </div> 
 
   <div ng-show="roomJoined">
-    <div ng-repeat="player in setPlayers" ng-click="attemptSet(player.id)" class="{{player.color}} player-button" ng-show="player.active">{{player.display}}</div>
+    <div ng-repeat="player in setPlayers" class="{{player.color}} player-button" ng-show="player.active">{{player.display}}</div>
+    <div ng-click='attemptSetKey()'>ATTEMPT A SET</div>
     <div class="board">
       <div ng-repeat="card in board track by $index" class="test" ng-class="{'selected':inSelectedCards($index)}"><img class="cards lower" ng-click="selectCard($index)" ng-src="{{card.location}}"></div>
       <!-- <div>{{answer[0]}}</div> -->

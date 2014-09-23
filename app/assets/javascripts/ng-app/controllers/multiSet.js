@@ -97,14 +97,17 @@ function multiSetCtrl($scope, $timeout, Game, Multiplayer, socket){
       }
     }
   }
+  $scope.attemptSetKey = function(event){
+    socket.emit('attempt:set')
+  }
   socket.on('lock:players', function(){
     Multiplayer.unlocked = false
   })
   $scope.updatePlayers = function(data){
-    Multiplayer.players[0].active = data.players[0].active
-    Multiplayer.players[1].active = data.players[1].active
-    Multiplayer.players[2].active = data.players[2].active
-    Multiplayer.players[3].active = data.players[3].active
+    for (i=0; i<4; i++){
+      Multiplayer.players[i].active = data.players[i].active
+      Multiplayer.players[i].points =data.players[i].points
+    }
    }
   socket.on('select:card', function(index){
     Game.addToSelectedCards(index)
@@ -132,6 +135,11 @@ function multiSetCtrl($scope, $timeout, Game, Multiplayer, socket){
             Game.selectedCards = []
             if (Game.checkResetNeeded(0)) {
               Game.makeSolvableBoard()
+              var data = {
+                board: Game.board,
+                deck: Game.deck
+              }
+              socket.emit('update:board', data)
             }
           } else {
             Multiplayer.deductPoints()
