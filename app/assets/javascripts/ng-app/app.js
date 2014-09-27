@@ -6,8 +6,12 @@ angular
   ]).config(function ($stateProvider, $urlRouterProvider, $locationProvider, socketProvider){
     socketProvider.setConnectionUrl(getServer())
     $stateProvider
-      .state('notSet', {
+      .state('login', {
         url: '/',
+        templateUrl: 'login.html',
+      })
+      .state('notSet', {
+        url: '/single',
         templateUrl: 'notSet.html',
         controller: 'notSetCtrl'
       })
@@ -16,7 +20,7 @@ angular
         templateUrl: 'notSetMulti.html',
         controller: 'multiSetCtrl'
       })
-    $urlRouterProvider.otherwise('/')
+    $urlRouterProvider.otherwise('/multi')
     $locationProvider.html5Mode(true)
   })
 

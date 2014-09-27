@@ -1,18 +1,17 @@
 <div class="game-wrapper" tabindex="0" ng-keypress="hotAttemptSet($event)">
-  <div ng-show="!roomJoined">
-    <div>{{failureMessage}}</div>
-    <div>==========</div>
-    <div>
-      <div>Room Name</div>
-      <input ng-model="roomToHost">
-      <div ng-click="hostRoom()">HOST ROOM</div>
-    </div>
-    <div>==========</div>
-    <div>
-      <div>JOIN A ROOM</div>
-    <div>==========</div>
-      <div>ROOM NAME: <input ng-model="roomToJoin"></div>     
-      <div ng-click='joinRoom()'>JOIN ROOM</div>
+  <div ng-show="!roomJoined" class="room-enter">
+    <div class="options-container">
+      <div class="option gray inline box-border" ng-class="{'highlighted':host}" ng-click="selectMode('host')">HOST ROOM</div>
+      <div class="inline">-OR-</div> 
+      <div class="option center-div gray inline box-border" ng-class="{'highlighted':join}" ng-click="selectMode('join')">JOIN ROOM</div>
+      <div>
+        <div>NICKNAME: <input ng-model="nickname"></div>
+
+        <div>ROOM NAME: <input ng-keypress="hotEnterRoom($event)" ng-model="roomToEnter"></div>
+        
+        <div ng-click="enterRoom()">ENTER ROOM</div>
+        <div>{{failureMessage}}</div>
+      </div>
     </div>
   </div> 
 
