@@ -1,0 +1,11 @@
+<div class="custom">
+  <div class="f-left">
+  <%= form_for @user do |f| %>
+    <%= f.text_field :email, placeholder: "e-mail"%>
+    <br>
+    <%= f.password_field :password, placeholder: "password"%>
+    <br>
+    <%= f.submit "Login/Signup" %>
+  <% end %>
+  </div>
+</div>

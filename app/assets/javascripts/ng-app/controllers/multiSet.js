@@ -1,7 +1,25 @@
 angular.module('notSetApp')
-  .controller('multiSetCtrl', ['$scope', '$timeout', 'Game', 'Multiplayer', 'socket', multiSetCtrl])
+  .controller('multiSetCtrl', ['$scope', '$timeout', 'Game', 'Multiplayer', 'socket', 'User', multiSetCtrl])
 
-function multiSetCtrl($scope, $timeout, Game, Multiplayer, socket){
+function multiSetCtrl($scope, $timeout, Game, Multiplayer, socket, User){
+  User.name.get()
+    .$promise.then(function(user){
+      $scope.username = user.name
+  })
+  socket.on('get:username', function(){
+    var username = $scope.username
+    socket.emit('recieve:username', username)
+  })
+  socket.on('pre:host:room', function(pairData){
+    var data = {}
+    data.room = $scope.username
+    data.game = {
+      deck: Game.deck,
+      board: Game.board,
+      players : Multiplayer.players
+    }
+    socket.emit('host:room', data)
+  })
   socket.on('host:room:error', function(room){
     $scope.failureMessage = "Error in hosting room "+room+"."
   })
@@ -72,6 +90,7 @@ function multiSetCtrl($scope, $timeout, Game, Multiplayer, socket){
   $scope.roomJoined = false
   $scope.setPlayers = Multiplayer.players
   $scope.attemptTimer = Multiplayer.attemptTimer
+  $scope.test = "{'hello':'world}"
   $scope.gameSettings = {
     deckType: "Endless",
     timeLimit: "No Time Limit",

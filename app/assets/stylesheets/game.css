@@ -3,6 +3,7 @@ body {
   -webkit-tap-highlight-color: rgba(0,0,0,0);
   margin:0;
   padding:0;
+  background-color:#f0f0f0;
 }
 
 .highlighted {
@@ -15,9 +16,9 @@ input {
   margin:10px;
 }
 
-div {
+/*div {
   cursor:pointer;
-}
+}*/
 
 .button {
   padding:2px;
@@ -75,10 +76,9 @@ div {
   border-bottom-left-radius: 15px;
 }
 
-
-
 .test{
   display:inline-block;
+  cursor: pointer;
 }
 
 

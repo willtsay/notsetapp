@@ -1,0 +1,78 @@
+nav {
+  width:100%;
+  height:25px;
+  background-color:#08a86d;
+  border-bottom:1px double #05491d;
+}
+
+.oauth {
+  float:left;
+}
+
+.custom {
+  float:left;
+  display:inline;
+}
+
+.f-left {
+  float:left;
+}
+
+.nudge-down {
+  margin-top:6px;
+}
+
+a, a:hover, a:visited, a:active {
+  color:inherit;
+  text-decoration:none;
+}
+
+.login-button {
+  padding:4px;
+  border-radius:4px;
+  color:rgba(255,255,255,.8);
+}
+
+.login-container {
+  margin-top:20px;
+  width:400px;
+}
+
+input {
+  border: 5px solid rgba(9,184,79,.5); 
+  -webkit-box-shadow: 
+    inset 0 0 8px  rgba(0,0,0,0.1),
+          0 0 16px rgba(0,0,0,0.1); 
+  -moz-box-shadow: 
+    inset 0 0 8px  rgba(0,0,0,0.1),
+          0 0 16px rgba(0,0,0,0.1); 
+  box-shadow: 
+    inset 0 0 8px  rgba(0,0,0,0.1),
+          0 0 16px rgba(0,0,0,0.1); 
+  padding: 4px;
+  background: rgba(9,184,79,0.2);
+  border-radius:4px;
+  margin: 0 0 10px 0;
+  color:rgba(0,0,0,0.6);
+}
+
+
+.login-center {
+  overflow: visible;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.google {
+  background: -webkit-linear-gradient(#f25f5c, #bb0005); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(#f25f5c, #bb0005); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(#f25f5c, #bb0005); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(#f25f5c, #bb0005); /* Standard syntax */
+}
+
+.facebook {
+  background: -webkit-linear-gradient(#87adff, #4d63bb); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(#87adff, #4d63bb); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(#87adff, #4d63bb); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(#87adff, #4d63bb); /* Standard syntax */
+}
