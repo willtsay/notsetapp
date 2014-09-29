@@ -20,6 +20,9 @@ function multiSetCtrl($scope, $timeout, Game, Multiplayer, socket, User){
     }
     socket.emit('host:room', data)
   })
+  socket.on('pre:join:room', function(room){
+    socket.emit('join:room', room)   
+  })
   socket.on('host:room:error', function(room){
     $scope.failureMessage = "Error in hosting room "+room+"."
   })
@@ -39,7 +42,6 @@ function multiSetCtrl($scope, $timeout, Game, Multiplayer, socket, User){
   socket.on('room:hosted', function(data){
     $scope.roomJoined = true
     $scope.updatePlayers(data)
-    Multiplayer.players[0].active = data.players[0].active
   })
   socket.on('room:left', function(data){
     $scope.updatePlayers(data)
@@ -108,10 +110,6 @@ function multiSetCtrl($scope, $timeout, Game, Multiplayer, socket, User){
     socket.emit('host:room', data)
   }
   $scope.joinRoom = function(){
-    data = {
-      room: $scope.roomToEnter,
-      nickname: $scope.nickname
-    }
     socket.emit('join:room', $scope.roomToEnter)
   }
   $scope.enterRoom = function(){
@@ -160,6 +158,7 @@ function multiSetCtrl($scope, $timeout, Game, Multiplayer, socket, User){
     for (i=0; i<4; i++){
       Multiplayer.players[i].active = data.players[i].active
       Multiplayer.players[i].points =data.players[i].points
+      Multiplayer.players[i].name = data.players[i].name
     }
    }
   $scope.selectCard = function($index){

@@ -7,12 +7,12 @@ function Multiplayer($rootScope, $timeout, Game, socket){
     {
       id: 0,
       color: 'blue',
-      text:"1",
+      name:"1",
       points: 0,
       active: false,
       get display(){
         if (service.currentPlayer !== this.id){
-          return this.text+": "+this.points          
+          return this.name+": "+this.points          
         }  else {
           return (service.attemptTimer[0]+1000)/1000
         }
@@ -21,46 +21,17 @@ function Multiplayer($rootScope, $timeout, Game, socket){
     {
       id: 1,
       color: 'red',
-      text:"2",
+      name:"2",
       points: 0,
       active: false,
       get display(){
         if (service.currentPlayer !== this.id){
-          return this.text+": "+this.points          
+          return this.name+": "+this.points          
         }  else {
           return (service.attemptTimer[0]+1000)/1000
         }
 
       }      
-    },
-    {
-      id: 2,
-      color: 'green',
-      text:"3",
-      points: 0,
-      active: false,
-      get display(){
-        if (service.currentPlayer !== this.id){
-          return this.text+": "+this.points          
-        }  else {
-          return (service.attemptTimer[0]+1000)/1000
-        }
-      }      
-    },
-    {
-      id: 3,
-      color: 'purple',
-      text:"4",
-      points: 0,
-      active: false,
-      get display(){
-        if (service.currentPlayer !== this.id){
-          return this.text+": "+this.points          
-        }  else {
-          console.log("THIS HAPPENED WOAH")
-          return (service.attemptTimer[0]+1000)/1000
-        }
-      }    
     }],
     cullPlayers: function(amount){
       for(i=0;i<4-amount;i++) {
