@@ -1,7 +1,7 @@
 {
-  "name": "angular-animate",
+  "name": "angular-resource",
   "version": "1.2.25",
-  "main": "./angular-animate.js",
+  "main": "./angular-resource.js",
   "dependencies": {
     "angular": "1.2.25"
   }

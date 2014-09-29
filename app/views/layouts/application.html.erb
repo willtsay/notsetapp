@@ -6,6 +6,11 @@
   <%= javascript_include_tag 'application' %>
   <script src="http://quiet-journey-3472.herokuapp.com/socket.io/socket.io.js"></script>
   <script src="http://localhost:8080/socket.io/socket.io.js"></script>
+  <script type="text/javascript">
+    if (window.location.hash && window.location.hash == '#_=_') {
+        window.location.hash = '';
+    }
+  </script>
   <%= csrf_meta_tags %>
 </head>
 <body ng-app='notSetApp'>
