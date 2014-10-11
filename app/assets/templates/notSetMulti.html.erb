@@ -1,27 +1,16 @@
-<div class="game-wrapper" tabindex="0" ng-keypress="hotAttemptSet($event)">
+<div class="game-wrapper" tabindex="0" ng-keypress="hotAttemptSet($event)" ng-init="init()">
   <div ng-show="!roomJoined" class="room-enter">
-    <div class="options-container">
-      <div class="option gray inline box-border" ng-class="{'highlighted':host}" ng-click="selectMode('host')">HOST ROOM</div>
-      <div class="inline">-OR-</div> 
-      <div class="option center-div gray inline box-border" ng-class="{'highlighted':join}" ng-click="selectMode('join')">JOIN ROOM</div>
-      <div>
-        <div>NICKNAME: <input ng-model="nickname"></div>
 
-        <div>ROOM NAME: <input ng-keypress="hotEnterRoom($event)" ng-model="roomToEnter"></div>
-        
-        <div ng-click="enterRoom()">ENTER ROOM</div>
+    <div>Finding an opponent!</div>
         <div>{{failureMessage}}</div>
-      </div>
-    </div>
   </div> 
 
   <div ng-show="roomJoined">
     <div ng-repeat="player in setPlayers" class="{{player.color}} player-button" ng-show="player.active">{{player.display}}</div>
-    <div ng-click='attemptSetKey()'>ATTEMPT A SET</div>
+    <div ng-click='attemptSetKey()' class="green player-button">ATTEMPT A SET</div>
     <div class="board">
       <div ng-repeat="card in board track by $index" class="test" ng-class="{'selected':inSelectedCards($index)}"><img class="cards lower" ng-click="selectCard($index)" ng-src="{{card.location}}"></div>
-      <!-- <div>{{answer[0]}}</div> -->
-      <div ng-show="timer!='notimer'">TIME:{{ timer | date: 'mm:ss'}} </div>
+      <div>{{answer[0]}}</div>
     </div>
   </div>
 </div>

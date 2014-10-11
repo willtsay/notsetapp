@@ -1,9 +1,12 @@
 <div class="login-container login-center">
-  <h2>log in or sign up to play set</h2>
+  <%= link_to "Play Single Player!", "/single", class: "cta" %>
+  <h2>log in or sign up for multiplayer</h2>
     <%= render partial: 'new' %>
     <div class="oauth">
       <div class="login-button google"><%= link_to "sign in with google+", @google_url %></div>
       <br>
       <div class="login-button facebook"><%= link_to "sign in with facebook", @facebook_url %></div>
     </div>
+
+
 </div>

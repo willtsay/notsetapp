@@ -12,6 +12,7 @@ function multiSetCtrl($scope, $timeout, Game, Multiplayer, socket, User){
   })
   socket.on('pre:host:room', function(pairData){
     var data = {}
+    data.guest = pairData.guest
     data.room = $scope.username
     data.game = {
       deck: Game.deck,
@@ -87,20 +88,22 @@ function multiSetCtrl($scope, $timeout, Game, Multiplayer, socket, User){
       $scope.join = true
     }
   }
+  $scope.answer = Game.answer
   $scope.board = Game.board
   $scope.deck = Game.deck
   $scope.roomJoined = false
   $scope.setPlayers = Multiplayer.players
   $scope.attemptTimer = Multiplayer.attemptTimer
-  $scope.test = "{'hello':'world}"
   $scope.gameSettings = {
     deckType: "Endless",
     timeLimit: "No Time Limit",
     players: 2
   }
+  $scope.init = function(){
+    socket.emit('make:match')
+  }
   $scope.hostRoom = function(){
     var data = {}
-    data.nickname = $scope.nickname
     data.room = $scope.roomToEnter
     data.game = {
       deck: Game.deck,
