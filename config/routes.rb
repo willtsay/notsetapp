@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get '/name', to: "sessions#name"
   resources :users, only: [:index, :create]
   resources :sessions, only: [:new, :create, :destroy]
+  get '/single', to: "single#index"
   get '*path' => 'game#index'
 
 end
