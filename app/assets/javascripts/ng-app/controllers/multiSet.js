@@ -12,6 +12,7 @@ function multiSetCtrl($scope, $timeout, Game, Multiplayer, socket, User){
   })
   socket.on('pre:host:room', function(pairData){
     var data = {}
+    data.guest = pairData.guest
     data.room = $scope.username
     data.game = {
       deck: Game.deck,
@@ -19,6 +20,9 @@ function multiSetCtrl($scope, $timeout, Game, Multiplayer, socket, User){
       players : Multiplayer.players
     }
     socket.emit('host:room', data)
+  })
+  socket.on('pre:join:room', function(room){
+    socket.emit('join:room', room)   
   })
   socket.on('host:room:error', function(room){
     $scope.failureMessage = "Error in hosting room "+room+"."
@@ -39,7 +43,6 @@ function multiSetCtrl($scope, $timeout, Game, Multiplayer, socket, User){
   socket.on('room:hosted', function(data){
     $scope.roomJoined = true
     $scope.updatePlayers(data)
-    Multiplayer.players[0].active = data.players[0].active
   })
   socket.on('room:left', function(data){
     $scope.updatePlayers(data)
@@ -85,20 +88,22 @@ function multiSetCtrl($scope, $timeout, Game, Multiplayer, socket, User){
       $scope.join = true
     }
   }
+  $scope.answer = Game.answer
   $scope.board = Game.board
   $scope.deck = Game.deck
   $scope.roomJoined = false
   $scope.setPlayers = Multiplayer.players
   $scope.attemptTimer = Multiplayer.attemptTimer
-  $scope.test = "{'hello':'world}"
   $scope.gameSettings = {
     deckType: "Endless",
     timeLimit: "No Time Limit",
     players: 2
   }
+  $scope.init = function(){
+    socket.emit('make:match')
+  }
   $scope.hostRoom = function(){
     var data = {}
-    data.nickname = $scope.nickname
     data.room = $scope.roomToEnter
     data.game = {
       deck: Game.deck,
@@ -108,10 +113,6 @@ function multiSetCtrl($scope, $timeout, Game, Multiplayer, socket, User){
     socket.emit('host:room', data)
   }
   $scope.joinRoom = function(){
-    data = {
-      room: $scope.roomToEnter,
-      nickname: $scope.nickname
-    }
     socket.emit('join:room', $scope.roomToEnter)
   }
   $scope.enterRoom = function(){
@@ -160,6 +161,7 @@ function multiSetCtrl($scope, $timeout, Game, Multiplayer, socket, User){
     for (i=0; i<4; i++){
       Multiplayer.players[i].active = data.players[i].active
       Multiplayer.players[i].points =data.players[i].points
+      Multiplayer.players[i].name = data.players[i].name
     }
    }
   $scope.selectCard = function($index){

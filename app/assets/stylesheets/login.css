@@ -31,6 +31,7 @@ a, a:hover, a:visited, a:active {
   padding:4px;
   border-radius:4px;
   color:rgba(255,255,255,.8);
+
 }
 
 .login-container {
@@ -38,7 +39,18 @@ a, a:hover, a:visited, a:active {
   width:400px;
 }
 
-input {
+.cta {
+  color:rgba(255,255,255,0.9) !important;
+  padding:.3em;
+  font-size:1.1em;
+  border-radius:.5em;
+  background: -webkit-linear-gradient(#8bd58a, #09b84f); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(#8bd58a, #09b84f); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(#8bd58a, #09b84f); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(#8bd58a, #09b84f); /* Standard syntax */
+}
+
+input.login {
   border: 5px solid rgba(9,184,79,.5); 
   -webkit-box-shadow: 
     inset 0 0 8px  rgba(0,0,0,0.1),
