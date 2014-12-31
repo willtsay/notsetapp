@@ -1,6 +1,6 @@
 angular.module('notSetApp')
   .controller('multiSetCtrl', ['$scope', '$timeout', 'Game', 'Multiplayer', 'socket', 'User', multiSetCtrl])
-
+  
 function multiSetCtrl($scope, $timeout, Game, Multiplayer, socket, User){
   User.name.get()
     .$promise.then(function(user){

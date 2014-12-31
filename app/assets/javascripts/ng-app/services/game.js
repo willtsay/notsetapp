@@ -20,7 +20,7 @@ function Game($rootScope){
     deckTypes: [
       {
         type: "endless",
-        text: "Endless Mode"      
+        text: "Endless Mode"
       },
       {
         type: "normal",
